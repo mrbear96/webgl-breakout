@@ -1,0 +1,127 @@
+body{
+    background: #36486b;
+}
+
+#canvas {
+    margin: auto auto;
+    display: block;
+    background: url("../res/stars2.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+     box-shadow: 
+         0px 6px 8px -5px #CCC,
+         0px -6px 8px -5px #CCC,
+         0px 0px 3px 1px #000,
+         inset 1px 10px 30px 20px #000;
+}
+
+.canvas_container{
+    background: rgba(0, 0, 0, 0.77);
+    width: 70vw;  
+    align-items: center;
+    margin: auto auto;
+    border-radius: 30px;
+    min-width: 1100px;
+    box-shadow: 
+    0px 5px 20px 5px rgba(0, 0, 0, 0.67);
+}
+
+.score{
+    color: white;
+    font-size: 36px;
+}
+
+#myBtn {
+    border-radius: 34px;
+    background: rgba(0,0,0,0.4);
+    color: white;
+    font-size: 20px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+
+.header {
+    width: 80vw;
+    background-color: rgba(0, 0, 0, 0.9);
+    color:white;
+    text-align: center;
+    border-radius: 30px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    min-width:1100px;
+    display: table;
+    height: 50px;
+    box-shadow: 
+    0px 3px 10px 5px rgba(0, 0, 0, 0.67);
+}
+
+.footer {
+    padding-top: 10px;
+    color:white;
+    text-align: center;
+    width:100vw;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: rgba(0,0,0,0.8);
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Could be more or less, depending on screen size */
+    font-size: 16px;
+    color: white;
+
+
+
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}

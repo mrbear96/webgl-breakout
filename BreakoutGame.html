@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+    <!-- ******* HEADER ******* -->
+    <head>
+        <title>Breakout the Game</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="css/sp.css">
+
+        <script id="vertex-shader" type="x-shader/x-vertex">
+  
+            precision mediump float;
+                                    
+            attribute vec4 vertexPosition;
+            uniform vec2 trans;
+          
+            mat4 transMat = mat4( 
+              1, 0, 0, 0,
+              0, 1, 0, 0,
+              0, 0, 1, 0,
+              trans.x, trans.y, 0, 1
+            );
+          
+            void main() {
+              gl_Position = transMat * vertexPosition; // Vf = M * Vi
+            }
+          </script>
+          <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+            uniform vec4 fragColor; 
+          
+            void main() {
+              gl_FragColor = fragColor; 
+            }
+          </script>
+          <script type="text/javascript" src="Common/webgl-utils.js"></script>
+          <script type="text/javascript" src="Common/InitShaders.js"></script>
+          <script type="text/javascript" src="Common/MV.js"></script>
+
+          <script type="text/javascript" src="js/main.js"></script>
+        </head>
+
+    <!-- ******* BODY ******* -->
+          <body onload="initGL()">
+            
+            <audio id="music" style="display:hidden" loop=""></audio>
+
+            <div class="header clearfix">
+                <button id="myBtn">About</button>
+                <div class="score"> Score: <span id="score1">0</span></div>
+            </div>
+
+            
+
+            <div class="canvas_container">
+              <canvas id="canvas" width="1024" height="600"></canvas>
+            </div>
+
+            <div class="footer">
+              Computer Graphics project, by Andrei Bublea.
+            </div>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <div>
+                  <h1>Game</h1>
+                  <span>
+                    Hit all the bricks.<br>
+                    The more you catch it, the faster it gets, so make sure to aim well!
+                  </span>
+                  <hr/>
+                </div>
+              </div>
+            </div>
+            
+          </body>
+          <script type="text/javascript" src="js/other.js"></script>
+</html>
