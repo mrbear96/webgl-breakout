@@ -30,6 +30,7 @@ body{
 .score{
     color: white;
     font-size: 36px;
+    padding-top: 5px;
 }
 
 #myBtn {
@@ -124,4 +125,33 @@ h1 {
     content: "";
     clear: both;
     display: table;
+}
+
+#overlay {
+   position:absolute;
+    display: block;
+    width: 300px;
+    height: 200px;
+    top: 0;
+    margin-left: calc(50% - 150px);
+    margin-top: 250px;
+    z-index: 2;
+    cursor: pointer;
+    background: url("../res/refresh.png");
+    background-repeat: no-repeat;
+    background-color: rgba(54, 72, 107, 0.33);
+    background-position: center;
+    background-position-y: -5px;
+    color:#BBB2B2;
+    font-size: 20px;
+    text-align: center;
+    line-height: 200px;
+    border-radius: 200px;
+
+    box-shadow: 
+    0px 6px 8px -5px rgba(204, 204, 204, 1),
+    0px -6px 8px -5px rgba(204, 204, 204, 1),
+    0px 0px 3px 1px #000,
+    inset 1px 5px 200px 5px #000;
+
 }

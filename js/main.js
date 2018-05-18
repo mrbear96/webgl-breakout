@@ -321,8 +321,16 @@ function ballCollisionUpdate() {
 	}
 
 	// Check to see if ball is touching wall
-	if (checkWallCollision() == true)
+	var wallTouched = -1;
+	if ((wallTouched = checkWallCollision()) > -1) {
+		// if bottom wall touched end game
+		if (wallTouched == 1){
+			field.playing = false;
+			enableOverlay();
+		}
 		return true;
+	}
+		
 
 	//remove the brick if collision with ball
 	var collidedWith = -1;
@@ -371,39 +379,39 @@ function checkVictory()
 	if (bricks.coords.length == 0){
 		console.log("VICTORY");
 		field.playing = false;
+		enableOverlay();
 	}
 }
 
 
 // collision with wall
 function checkWallCollision(){
-	var ret = false;
+	var ret = -1;
 
 	//Upper wall
 	if(ball.y >= 1 - ball.radius) {
 		yDir = -1;
-		ret = true;
+		ret = 0;
 	}
 
 	//Bottom wall
 	if(ball.y <= -1 + ball.radius) {
 		yDir = 1;
-		ret = true
-		field.playing = false;
+		ret = 1
 	}
 
 	//Left wall
 	if(ball.x <= -1 + ball.radius) {
 		theta *= -1;
 		ball.x += 0.001;
-		ret = true;
+		ret = 2;
 	}
 
 	//Right wall
 	if(ball.x >= 1 - ball.radius) {
 		theta *= -1;
 		ball.x -= 0.001;
-		ret = true;
+		ret = 3;
 	}
 
 	return ret;
@@ -484,6 +492,7 @@ function onDocumentMouseClick( event )
 	if (field.playing == false) {
 		initObjects();
 		field.playing = true;
+		disableOverlay();
 	}
 }
 
@@ -500,4 +509,15 @@ function playSound(sound){
 function randomIntFromInterval(min,max)
 {
     return Math.random()*(max-min)+min;
+}
+
+function enableOverlay() {
+    document.getElementById("overlay").style.display = "block";
+}
+
+function disableOverlay() {
+	document.getElementById("overlay").style.display = "none";
+	initObjects();
+	field.playing = true;
+	
 }
