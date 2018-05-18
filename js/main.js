@@ -21,6 +21,8 @@ var viewportRatio; //  Variable used to correct how objects appear on the viewpo
 
 var trailLen = 30; // Circular buffer length for trail
 var trailIdx = 0; // It's index
+var sparksCnt = 10;
+var ballSpeedGain = 0.5;
 
 var canvas;
 
@@ -75,7 +77,7 @@ function initObjects() {
 		vertices: [],
 		m_directions:[],
 		alive: [],
-		colors: [1.0,1.0,0.0,1.0]
+		colors: [1.0,1.0,0.4,1.0]
 	}
 		
 	field = {
@@ -112,7 +114,7 @@ function initBall(){
 
 function initTrail(){
 	//initially no trail
-	for (var i=0; i<trailLen; i++){
+	for (var i=0; i<100; i++){
 		trail.coords.push(vec2(0,0));
 	}
 	//push vertices(which are used to form a circle)
@@ -136,7 +138,6 @@ function initBricks(){
 	// random color for each brick
 	for (var i=0; i<bricks.coords.length; i++){
 		bricks.colors.push(vec4(Math.random().toFixed(2),Math.random().toFixed(2),Math.random().toFixed(2),1.0));
-		//bricks.colors.push(vec4("0.6","0.63","0.7", "1.0"));
 	}
 
 	bricks.vertices.push(vec2(0, 0));
@@ -146,7 +147,8 @@ function initBricks(){
 }
 
 //sparks are made from 3 triangles to form a star with 6 corners
-function initSparks(){
+function initSparks()
+{
 	//first triangle
 	sparks.vertices.push(vec2(sparks.width/2, 0));
 	sparks.vertices.push(vec2(0.20*sparks.width, -sparks.height));
@@ -161,7 +163,8 @@ function initSparks(){
 	sparks.vertices.push(vec2(0.40*sparks.width, -0.40*sparks.height));
 }
 
-function generateSparks( num ){
+function generateSparks( num )
+{
 	for (var i=0; i<num; i++){
 		sparks.lcoords.push(vec2(ball.x,ball.y));
 		sparks.coords.push(vec2(ball.x,ball.y));
@@ -171,7 +174,8 @@ function generateSparks( num ){
 }
 
 /* initGL(): Spin up initial WebGL program state */
-function initGL(){
+function initGL()
+{
 	canvas = document.getElementById( "canvas" ); // Grab canvas from HTML
 
 	gl = WebGLUtils.setupWebGL( canvas );
@@ -215,11 +219,11 @@ function initGL(){
 
 /* render(): Main event loop, controls vertex/fragment rendering and fires
 	collision detection/score update functions when necessary. */
-function render() {
+function render() 
+{
 	gl.clear(gl.COLOR_BUFFER_BIT); // Clear the buffer
 
 	if (field.playing){ // If game is ongoing...
-		
 		renderTrail();
 		renderBall();
 		renderPaddle();
@@ -227,13 +231,11 @@ function render() {
 		renderSparks();
 		ballCollisionUpdate(); // Check ball collision
 	}
-
 	requestAnimFrame(render); // Inform the browser we're ready to render another frame
-	
 }
 
-function renderSparks(){
-
+function renderSparks()
+{
 	gl.uniform4f(fragColorLoc, sparks.colors[0], sparks.colors[1], sparks.colors[2], 1.0);
 
 	for (var num=0; num < sparks.lcoords.length; num++){
@@ -250,7 +252,6 @@ function renderSparks(){
 		for (var i=0; i < sparks.coords.length; i++){
 			sparks.coords[i][0] += sparks.m_directions[i][0]/4;
 			sparks.coords[i][1] += sparks.m_directions[i][1]/4;
-			//console.log(sparks.coords[i][0] + "  " + sparks.coords[i][1]);
 			
 			gl.uniform2f(transLoc, sparks.coords[i][0], sparks.coords[i][1]);
 			gl.drawArrays(gl.TRIANGLES, 0, sparks.vertices.length);
@@ -259,14 +260,16 @@ function renderSparks(){
 	}
 }
 
-function renderPaddle() {
+function renderPaddle() 
+{
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(paddle.vertices), gl.STATIC_DRAW);
 	gl.uniform4f(fragColorLoc, 1.0, 1.0, 1.0, 1.0); // Ensure paddles get rendered as white, regardlesss of ball
 	gl.uniform2f(transLoc, transX1, 0);
 	gl.drawArrays(gl.TRIANGLE_FAN, 0, paddle.vertices.length);
 }
 
-function renderBall() {
+function renderBall() 
+{
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(ball.vertices), gl.STATIC_DRAW);
 	gl.uniform4f(fragColorLoc, ball.color[0], ball.color[1], ball.color[2], ball.color[3]);
 	gl.uniform2f(transLoc, ball.x, ball.y);
@@ -275,12 +278,12 @@ function renderBall() {
 	ball.x += ball.speed * xDir * 0.01 * Math.sin(theta) * Math.abs(Math.cos(theta))  ;
 	ball.y += ball.speed * yDir * 0.01 * Math.cos(theta);
 
-}
-
-function renderTrail(){
 	trail.coords[trailIdx] = vec2(ball.x, ball.y);
 	trailIdx = (trailIdx+1) % trailLen;
+}
 
+function renderTrail()
+{	
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(trail.vertices), gl.STATIC_DRAW);
 	for (var i=0; i<trailLen; i++){
 		if (i == trailIdx - 1) 
@@ -301,22 +304,19 @@ function renderBricks(){
 	}
 }
 
-
-
  /* ----=================---------------==================--------------------==========================================
-
 /************** COLLISION FUNCTIONS *************** */
  
 /* ballCollisionUpdate(): Initial function for ball collision checks */
-function ballCollisionUpdate() {
-
+function ballCollisionUpdate() 
+{
 	//if all bricks = destroyed , endgame win
 	checkVictory();
 
 	// check collision with paddle
 	if (checkPaddleCollision() == true){
 		playSound("audio/anvil.mp3");
-		generateSparks(10);
+		generateSparks(sparksCnt);
 		return true;
 	}
 
@@ -330,7 +330,6 @@ function ballCollisionUpdate() {
 		}
 		return true;
 	}
-		
 
 	//remove the brick if collision with ball
 	var collidedWith = -1;
@@ -339,13 +338,13 @@ function ballCollisionUpdate() {
 		displayScore();
 		bricks.coords.splice(collidedWith,1);
 		bricks.colors.splice(collidedWith,1);
-		generateSparks(10);
+		generateSparks(sparksCnt);
 		return true;
 	}
 }
 
-function checkBrickCollision(){
-
+function checkBrickCollision()
+{
 	for (var i=0; i<bricks.coords.length; i++)
 	{
 		if (ball.x >= bricks.coords[i][0] && ball.x <= bricks.coords[i][0] + bricks.width &&
@@ -385,7 +384,8 @@ function checkVictory()
 
 
 // collision with wall
-function checkWallCollision(){
+function checkWallCollision()
+{
 	var ret = -1;
 
 	//Upper wall
@@ -426,7 +426,7 @@ function checkPaddleCollision(){
 			(ball.x  < paddle.x + paddle.halfwidth)) //COLLISION!
 		{ 
 			yDir = 1;
-			ball.speed += 0.4/ball.speed;
+			ball.speed += ballSpeedGain/ball.speed;
 			theta = ( paddle.x - ball.x )* 2 * Math.PI;
 			return true;
 		}
@@ -487,8 +487,7 @@ function onDocumentMouseMove( event ){
 	}
 }
 
-function onDocumentMouseClick( event )
-{
+function onDocumentMouseClick( event ){
 	if (field.playing == false) {
 		initObjects();
 		field.playing = true;
@@ -503,11 +502,9 @@ function playSound(sound){
 	snd = new Audio(sound);
 	snd.volume = 0.2;
 	snd.play();
-	
 }
 
-function randomIntFromInterval(min,max)
-{
+function randomIntFromInterval(min,max){
     return Math.random()*(max-min)+min;
 }
 
@@ -519,5 +516,22 @@ function disableOverlay() {
 	document.getElementById("overlay").style.display = "none";
 	initObjects();
 	field.playing = true;
-	
 }
+
+function dispTrailLen( val ){ document.getElementById('htmlTrailLen').innerHTML = val; }
+
+function onSetTrailLen() {
+	var val = document.getElementById('trlength').value;
+
+	for(var i= trailLen < val ? trailLen : 0; i<100; i++){
+		trail.coords[i][0] = -2;
+		trail.coords[i][1] = -2;
+	}
+	trailLen = val;
+}
+
+function dispSparksCnt( val ) { document.getElementById('htmlSparksCount').innerHTML = val; }
+function onSetSparksCnt() { sparksCnt = document.getElementById('sparkscnt').value; }
+
+function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = val; }
+function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }

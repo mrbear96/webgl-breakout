@@ -31,9 +31,20 @@ body{
     color: white;
     font-size: 36px;
     padding-top: 5px;
+    margin-left: 200px;
 }
 
-#myBtn {
+#aboutButton {
+    border-radius: 34px;
+    background: rgba(0,0,0,0.4);
+    color: white;
+    font-size: 20px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#optionsButton {
     border-radius: 34px;
     background: rgba(0,0,0,0.4);
     color: white;
@@ -56,7 +67,7 @@ body{
     display: table;
     height: 50px;
     box-shadow: 
-    0px 3px 10px 5px rgba(0, 0, 0, 0.67);
+    0px 3px 20px 3px rgba(0, 0, 0, 0.67);
 }
 
 .footer {
@@ -69,7 +80,7 @@ body{
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 3; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -80,7 +91,7 @@ body{
 }
 
 /* Modal Content/Box */
-.modal-content {
+.modal-about-content {
     background-color: rgba(0,0,0,0.8);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
@@ -88,9 +99,16 @@ body{
     width: 30%; /* Could be more or less, depending on screen size */
     font-size: 16px;
     color: white;
+}
 
-
-
+.modal-options-content {
+    background-color: rgba(0,0,0,1);
+    margin: 12% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%; /* Could be more or less, depending on screen size */
+    font-size: 16px;
+    color: white;
 }
 
 /* The Close Button */
@@ -154,4 +172,36 @@ h1 {
     0px 0px 3px 1px #000,
     inset 1px 5px 200px 5px #000;
 
+}
+
+#htmlTrail {
+    font-size: 26px;
+}
+
+#sparks {
+    font-size: 26px;
+}
+
+#ballSpeed {
+    font-size: 26px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 50%;
 }
