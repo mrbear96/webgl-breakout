@@ -3,15 +3,15 @@
 var gl; // Application WebGL instance
 var program; // Shader program (should contain vertex & fragment shaders)
 
-var transY1 = 0.0; // Variable containing vertical translation for first paddle
-var transXBall = 0.0; // Variable containing horizontal translation for ball
-var transYBall = 0.01; // Variable containing vertical translation for ball
-var transX1 = 0.0;
+var transY1; // Variable containing vertical translation for paddle
+var transXBall; // Variable containing horizontal translation for ball
+var transYBall; // Variable containing vertical translation for ball
+var transX1;
 
-var yDir = 1; // The direction of the ball in the y-axis
-var xDir = -1; // The direction of the ball in the x-axis
+var yDir; // The direction of the ball in the y-axis
+var xDir; // The direction of the ball in the x-axis
 
-var theta = 0; // The angle used for ricocheting the ball
+var theta; // The angle used for ricocheting the ball
 
 var transLoc; // trans Uniform location from shader
 var fragColorLoc; // frag_color Uniform location from shader
@@ -45,16 +45,13 @@ function initObjects() {
 		]
 	};
 
-	// Tennis ball
 	ball = {
 		x: 0,
 		y: 0,
 		radius: 0.03,
 		speed: 2,
 		color: vec4(1.0,1.0,1.0,1.0),
-		vertices: [
-			//initialized in a foor loop
-		]
+		vertices: []
 	};
 
 	trail = {
@@ -65,7 +62,6 @@ function initObjects() {
 	bricks = {
 		height: 0.10,
 		width: 0.10,
-
 		coords: [],
 		vertices: [],
 		colors: []
@@ -74,7 +70,6 @@ function initObjects() {
 	sparks = {
 		height: 0.03,
 		width: viewportRatio*0.03,
-
 		lcoords:[],
 		coords: [],
 		vertices: [],
@@ -82,22 +77,30 @@ function initObjects() {
 		alive: [],
 		colors: [1.0,1.0,0.0,1.0]
 	}
-
 		
-	// Play field
 	field = {
-		score1: 0, // P1 score
-		score2: 0, // P2 score
-		playing: true
+		score1: 0,
+		score2: 0,
+		playing: false
 	};
 
+
+	transY1 = 0.0; 
+	transXBall = 0.0; 
 	transYBall = 0.01;
-	yDir =  -1  // Randomize the direction the ball starts travelling
+	transX1 = 0.0;
+
+	yDir = -1; 
+	xDir = -1; 
+	
+	theta = 0;
 
 	initBall();
 	initTrail();
 	initBricks();
 	initSparks();
+
+	document.getElementById("score1").innerHTML = 0;
 }
 
 function initBall(){
@@ -156,7 +159,15 @@ function initSparks(){
 	sparks.vertices.push(vec2(0.20*sparks.width, -sparks.height));
 	sparks.vertices.push(vec2(sparks.width,  -sparks.height*0.40));
 	sparks.vertices.push(vec2(0.40*sparks.width, -0.40*sparks.height));
-	
+}
+
+function generateSparks( num ){
+	for (var i=0; i<num; i++){
+		sparks.lcoords.push(vec2(ball.x,ball.y));
+		sparks.coords.push(vec2(ball.x,ball.y));
+		sparks.m_directions.push(vec2(randomIntFromInterval(-0.005,0.005), randomIntFromInterval(-0.005,0.005)));
+		sparks.alive.push(10);
+	}
 }
 
 /* initGL(): Spin up initial WebGL program state */
@@ -192,7 +203,8 @@ function initGL(){
 
 	
 
-	canvas.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	canvas.addEventListener ('click', onDocumentMouseClick, true);
 
 	render();
 }
@@ -324,15 +336,6 @@ function ballCollisionUpdate() {
 	}
 }
 
-function generateSparks( num){
-	for (var i=0; i<num; i++){
-		sparks.lcoords.push(vec2(ball.x,ball.y));
-		sparks.coords.push(vec2(ball.x,ball.y));
-		sparks.m_directions.push(vec2(randomIntFromInterval(-0.005,0.005), randomIntFromInterval(-0.005,0.005)));
-		sparks.alive.push(10);
-	}
-}
-
 function checkBrickCollision(){
 
 	for (var i=0; i<bricks.coords.length; i++)
@@ -349,18 +352,13 @@ function checkBrickCollision(){
 		var k = Math.min(ub,db,rb,lb);
 		
 		if (k == ub) {
-			//console.log("UB");
 			yDir = 1;
 		}  if (k == db){
-			//console.log("DB");
 			yDir = -1;
-			
 		}  if (k == rb) {
 			theta *= -1;
-			//console.log("RB");
 		}  if(k == lb){
 			theta *= -1;
-			//console.log("LB");
 		}
 		changeColorv(bricks.colors[i]);
 		return i;
@@ -384,14 +382,12 @@ function checkWallCollision(){
 	//Upper wall
 	if(ball.y >= 1 - ball.radius) {
 		yDir = -1;
-		console.log("u");
 		ret = true;
 	}
 
 	//Bottom wall
 	if(ball.y <= -1 + ball.radius) {
 		yDir = 1;
-		//console.log("d");
 		ret = true
 		field.playing = false;
 	}
@@ -400,7 +396,6 @@ function checkWallCollision(){
 	if(ball.x <= -1 + ball.radius) {
 		theta *= -1;
 		ball.x += 0.001;
-		//console.log("l");
 		ret = true;
 	}
 
@@ -408,7 +403,6 @@ function checkWallCollision(){
 	if(ball.x >= 1 - ball.radius) {
 		theta *= -1;
 		ball.x -= 0.001;
-		//console.log("r");
 		ret = true;
 	}
 
@@ -420,16 +414,12 @@ function checkWallCollision(){
 function checkPaddleCollision(){
 	if (ball.y - ball.radius < paddle.y + paddle.halfheight) {
 
-		if ((ball.x  > paddle.x - paddle.halfwidth) 
-			&& (ball.x  < paddle.x + paddle.halfwidth)) { //COLLISION!
-
-			//changeColor();
-				
+		if ((ball.x  > paddle.x - paddle.halfwidth) && 
+			(ball.x  < paddle.x + paddle.halfwidth)) //COLLISION!
+		{ 
 			yDir = 1;
 			ball.speed += 0.4/ball.speed;
-				
 			theta = ( paddle.x - ball.x )* 2 * Math.PI;
-				
 			return true;
 		}
 	}
@@ -472,10 +462,9 @@ function displaySpeed(){
 }
 
 // function to move the paddle to mouse coords
-function onDocumentMouseMove(event){
-	
+function onDocumentMouseMove( event ){
+
 	mouseX = event.clientX - (document.body.clientWidth - canvas.width)/2;
-	
 	normalized = (mouseX-canvas.width/2) / canvas.width*2;
 
 	if ( normalized > -1 + paddle.halfwidth && normalized < 1 - paddle.halfwidth){	
@@ -487,6 +476,14 @@ function onDocumentMouseMove(event){
 	} else {
 		transX1 = -1 + paddle.halfwidth;
 		paddle.x = transX1;
+	}
+}
+
+function onDocumentMouseClick( event )
+{
+	if (field.playing == false) {
+		initObjects();
+		field.playing = true;
 	}
 }
 
