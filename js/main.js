@@ -347,8 +347,8 @@ function checkBrickCollision()
 {
 	for (var i=0; i<bricks.coords.length; i++)
 	{
-		if (ball.x >= bricks.coords[i][0] && ball.x <= bricks.coords[i][0] + bricks.width &&
-			ball.y >= bricks.coords[i][1] && ball.y <= bricks.coords[i][1] + bricks.height)
+		if (ball.x + ball.radius/2 >= bricks.coords[i][0] && ball.x - ball.radius/2 <= bricks.coords[i][0] + bricks.width &&
+			ball.y + ball.radius/2 >= bricks.coords[i][1] && ball.y - ball.radius/2 <= bricks.coords[i][1] + bricks.height)
 		{
 			var ub = Math.abs(ball.y - (bricks.coords[i][1] + bricks.height));
 			var db = Math.abs(ball.y - (bricks.coords[i][1]));
@@ -381,7 +381,6 @@ function checkVictory()
 		enableOverlay();
 	}
 }
-
 
 // collision with wall
 function checkWallCollision()
@@ -420,6 +419,7 @@ function checkWallCollision()
 //collision with paddle
 
 function checkPaddleCollision(){
+
 	if (ball.y - ball.radius < paddle.y + paddle.halfheight) {
 
 		if ((ball.x  > paddle.x - paddle.halfwidth) && 
@@ -460,7 +460,7 @@ function changeColorv(colorvect)
 
 /* updateScore(playerNum): updates the score of player #playerNum */
 function displayScore(playerNum) {
-		field.score1 += 2*ball.speed;
+		field.score1 += (ball.speed+1)*(ball.speed+1);
 		document.getElementById('score1').innerHTML = Math.round(field.score1);
 }
 
@@ -533,5 +533,5 @@ function onSetTrailLen() {
 function dispSparksCnt( val ) { document.getElementById('htmlSparksCount').innerHTML = val; }
 function onSetSparksCnt() { sparksCnt = document.getElementById('sparkscnt').value; }
 
-function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = val; }
+function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = parseFloat(val).toFixed(1); }
 function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }
