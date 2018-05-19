@@ -6,9 +6,9 @@ body{
     margin: auto auto;
     display: block;
     background: url("../res/stars1.png");
-    background-attachment: fixed;
+    
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: 1024px 600px;
      box-shadow: 
          0px 6px 8px -5px #CCC,
          0px -6px 8px -5px #CCC,
@@ -36,17 +36,18 @@ body{
 
 #aboutButton {
     border-radius: 34px;
-    background: rgba(0,0,0,0.4);
+    background: #36486b40;
     color: white;
     font-size: 20px;
     float: right;
     margin-top: 10px;
     margin-right: 10px;
+    
 }
 
 #optionsButton {
     border-radius: 34px;
-    background: rgba(0,0,0,0.4);
+    background: #36486b40;
     color: white;
     font-size: 20px;
     float: right;
@@ -57,7 +58,7 @@ body{
 
 .header {
     width: 80vw;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.77);
     color:white;
     text-align: center;
     border-radius: 30px;
@@ -92,8 +93,8 @@ body{
 
 /* Modal Content/Box */
 .modal-about-content {
-    background-color: rgba(0,0,0,0.8);
-    margin: 15% auto; /* 15% from the top and centered */
+    background-color: rgba(0,0,0,1);
+    margin: 13% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 30%; /* Could be more or less, depending on screen size */
