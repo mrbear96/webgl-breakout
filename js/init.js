@@ -28,7 +28,6 @@ var canvas;
 
  /* ----=================---------------==================--------------------========================================== */
 
-
 function initObjects() {
 
     paddle = {
@@ -163,16 +162,6 @@ function initSparks()
 	sparks.vertices.push(vec2(0.40*sparks.width, -0.40*sparks.height));
 }
 
-function generateSparks( num )
-{
-	for (var i=0; i<num; i++){
-		sparks.lcoords.push(vec2(ball.x,ball.y));
-		sparks.coords.push(vec2(ball.x,ball.y));
-		sparks.m_directions.push(vec2(randomIntFromInterval(-0.005,0.005), randomIntFromInterval(-0.005,0.005)));
-		sparks.alive.push(10);
-	}
-}
-
 /* initGL(): Spin up initial WebGL program state */
 function initGL()
 {
@@ -205,248 +194,15 @@ function initGL()
 	transLoc = gl.getUniformLocation(program, "trans"); // Populate global variable w/ trans location
 	fragColorLoc = gl.getUniformLocation(program, "fragColor"); // Populate global variable w/ frag_color location
 
-	
-
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	canvas.addEventListener ('click', onDocumentMouseClick, true);
 
 	render();
 }
 
- /* ----=================---------------==================--------------------==========================================
-
-// ************* RENDER FUNCTIONS *****************
-
-/* render(): Main event loop, controls vertex/fragment rendering and fires
-	collision detection/score update functions when necessary. */
-function render() 
-{
-	gl.clear(gl.COLOR_BUFFER_BIT); // Clear the buffer
-
-	if (field.playing){ // If game is ongoing...
-		renderTrail();
-		renderBall();
-		renderPaddle();
-		renderBricks();
-		renderSparks();
-		ballCollisionUpdate(); // Check ball collision
-	}
-	requestAnimFrame(render); // Inform the browser we're ready to render another frame
-}
-
-function renderSparks()
-{
-	gl.uniform4f(fragColorLoc, sparks.colors[0], sparks.colors[1], sparks.colors[2], 1.0);
-
-	for (var num=0; num < sparks.lcoords.length; num++){
-		sparks.alive[num] -= 1;
-		if(sparks.alive[num] < 0) {
-			sparks.lcoords.splice(num,1);
-			sparks.coords.splice(num,1);
-			sparks.alive.splice(num,1);
-			sparks.m_directions.splice(num,1);
-			continue;
-		}
-
-		gl.bufferData(gl.ARRAY_BUFFER, flatten(sparks.vertices), gl.STATIC_DRAW);
-		for (var i=0; i < sparks.coords.length; i++){
-			sparks.coords[i][0] += sparks.m_directions[i][0]/4;
-			sparks.coords[i][1] += sparks.m_directions[i][1]/4;
-			
-			gl.uniform2f(transLoc, sparks.coords[i][0], sparks.coords[i][1]);
-			gl.drawArrays(gl.TRIANGLES, 0, sparks.vertices.length);
-
-		}
-	}
-}
-
-function renderPaddle() 
-{
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(paddle.vertices), gl.STATIC_DRAW);
-	gl.uniform4f(fragColorLoc, 1.0, 1.0, 1.0, 1.0); // Ensure paddles get rendered as white, regardlesss of ball
-	gl.uniform2f(transLoc, transX1, 0);
-	gl.drawArrays(gl.TRIANGLE_FAN, 0, paddle.vertices.length);
-}
-
-function renderBall() 
-{
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(ball.vertices), gl.STATIC_DRAW);
-	gl.uniform4f(fragColorLoc, ball.color[0], ball.color[1], ball.color[2], ball.color[3]);
-	gl.uniform2f(transLoc, ball.x, ball.y);
-	gl.drawArrays(gl.TRIANGLE_FAN, 0, ball.vertices.length);
-	
-	ball.x += ball.speed * xDir * 0.01 * Math.sin(theta) * Math.abs(Math.cos(theta))  ;
-	ball.y += ball.speed * yDir * 0.01 * Math.cos(theta);
-
-	trail.coords[trailIdx] = vec2(ball.x, ball.y);
-	trailIdx = (trailIdx+1) % trailLen;
-}
-
-function renderTrail()
-{	
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(trail.vertices), gl.STATIC_DRAW);
-	for (var i=0; i<trailLen; i++){
-		if (i == trailIdx - 1) 
-			continue;
-		
-		gl.uniform4f(fragColorLoc, ball.color[0], ball.color[1], ball.color[2], ball.color[3]);
-		gl.uniform2f(transLoc, trail.coords[i][0], trail.coords[i][1]);
-		gl.drawArrays(gl.TRIANGLE_FAN, 0, trail.vertices.length);
-	}
-}
-
-function renderBricks(){
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(bricks.vertices), gl.STATIC_DRAW);
-	for (var i=0; i<bricks.coords.length; i++){
-		gl.uniform4f(fragColorLoc, bricks.colors[i][0], bricks.colors[i][1], bricks.colors[i][2], bricks.colors[i][3]);
-		gl.uniform2f(transLoc, bricks.coords[i][0], bricks.coords[i][1]);
-		gl.drawArrays(gl.TRIANGLE_FAN, 0, bricks.vertices.length);
-	}
-}
-
- /* ----=================---------------==================--------------------==========================================
-/************** COLLISION FUNCTIONS *************** */
- 
-/* ballCollisionUpdate(): Initial function for ball collision checks */
-function ballCollisionUpdate() 
-{
-	//if all bricks = destroyed , endgame win
-	checkVictory();
-
-	// check collision with paddle
-	if (checkPaddleCollision() == true){
-		playSound("audio/anvil.mp3");
-		generateSparks(sparksCnt);
-		return true;
-	}
-
-	// Check to see if ball is touching wall
-	var wallTouched = -1;
-	if ((wallTouched = checkWallCollision()) > -1) {
-		// if bottom wall touched end game
-		if (wallTouched == 1){
-			field.playing = false;
-			enableOverlay();
-		}
-		return true;
-	}
-
-	//remove the brick if collision with ball
-	var collidedWith = -1;
-	if ( (collidedWith = checkBrickCollision()) >- 1){
-		playSound("audio/anvil.mp3");
-		displayScore();
-		bricks.coords.splice(collidedWith,1);
-		bricks.colors.splice(collidedWith,1);
-		generateSparks(sparksCnt);
-		return true;
-	}
-}
-
-function checkBrickCollision()
-{
-	for (var i=0; i<bricks.coords.length; i++)
-	{
-		if (ball.x + ball.radius/2 >= bricks.coords[i][0] && ball.x - ball.radius/2 <= bricks.coords[i][0] + bricks.width &&
-			ball.y + ball.radius/2 >= bricks.coords[i][1] && ball.y - ball.radius/2 <= bricks.coords[i][1] + bricks.height)
-		{
-			var ub = Math.abs(ball.y - (bricks.coords[i][1] + bricks.height));
-			var db = Math.abs(ball.y - (bricks.coords[i][1]));
-			var rb = Math.abs(ball.x - (bricks.coords[i][0] + bricks.width));
-			var lb = Math.abs(ball.x - (bricks.coords[i][0]));
-		} else continue;
-
-		var k = Math.min(ub,db,rb,lb);
-		
-		if (k == ub) {
-			yDir = 1;
-		}  if (k == db){
-			yDir = -1;
-		}  if (k == rb) {
-			theta *= -1;
-		}  if(k == lb){
-			theta *= -1;
-		}
-		changeColorv(bricks.colors[i]);
-		return i;
-	}
-	return -1;
-}
-
-function checkVictory()
-{
-	if (bricks.coords.length == 0){
-		console.log("VICTORY");
-		field.playing = false;
-		enableOverlay();
-	}
-}
-
-// collision with wall
-function checkWallCollision()
-{
-	var ret = -1;
-
-	//Upper wall
-	if(ball.y >= 1 - ball.radius) {
-		yDir = -1;
-		ret = 0;
-	}
-
-	//Bottom wall
-	if(ball.y <= -1 + ball.radius) {
-		yDir = 1;
-		ret = 1
-	}
-
-	//Left wall
-	if(ball.x <= -1 + ball.radius) {
-		theta *= -1;
-		ball.x += 0.001;
-		ret = 2;
-	}
-
-	//Right wall
-	if(ball.x >= 1 - ball.radius) {
-		theta *= -1;
-		ball.x -= 0.001;
-		ret = 3;
-	}
-
-	return ret;
-}
-
-//collision with paddle
-
-function checkPaddleCollision(){
-
-	if (ball.y - ball.radius < paddle.y + paddle.halfheight) {
-
-		if ((ball.x  > paddle.x - paddle.halfwidth) && 
-			(ball.x  < paddle.x + paddle.halfwidth)) //COLLISION!
-		{ 
-			yDir = 1;
-			ball.speed += ballSpeedGain/ball.speed;
-			theta = ( paddle.x - ball.x )* 2 * Math.PI;
-			return true;
-		}
-	}
-	return false;
-}
-
- /* ----=================---------------==================--------------------==========================================*/
-
  //************  HELPER FUNCTIONS  *****************
 
-function resetBall(playerNum) {
-	ball.x = 0;
-	ball.y = 0;
-	ball.speed = 1;
-	ball.color = vec4(1.0, 1.0, 1.0, 1.0);
-	theta = 0;
-	transYBall = 0.01;
-	yDir = -1;
-}
+
 
 /* changeColor(): update the ball with a random color after a paddle collision */
 function changeColor() {
@@ -530,8 +286,12 @@ function onSetTrailLen() {
 	trailLen = val;
 }
 
-function dispSparksCnt( val ) { document.getElementById('htmlSparksCount').innerHTML = val; }
-function onSetSparksCnt() { sparksCnt = document.getElementById('sparkscnt').value; }
-
-function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = parseFloat(val).toFixed(1); }
-function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }
+function generateSparks( num )
+{
+	for (var i=0; i<num; i++){
+		sparks.lcoords.push(vec2(ball.x,ball.y));
+		sparks.coords.push(vec2(ball.x,ball.y));
+		sparks.m_directions.push(vec2(randomIntFromInterval(-0.005,0.005), randomIntFromInterval(-0.005,0.005)));
+		sparks.alive.push(10);
+	}
+}

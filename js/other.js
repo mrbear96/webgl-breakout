@@ -20,3 +20,10 @@ window.onclick = function(event) {
     }
 }
 
+function dispSparksCnt( val ) { document.getElementById('htmlSparksCount').innerHTML = val; }
+function onSetSparksCnt() { sparksCnt = document.getElementById('sparkscnt').value; }
+
+function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = parseFloat(val).toFixed(1); }
+function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }
+
+

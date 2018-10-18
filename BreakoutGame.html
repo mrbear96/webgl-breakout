@@ -24,84 +24,91 @@
             void main() {
               gl_Position = transMat * vertexPosition; // Vf = M * Vi
             }
-          </script>
-          <script id="fragment-shader" type="x-shader/x-fragment">
+        </script>
+        <script id="fragment-shader" type="x-shader/x-fragment">
             precision mediump float;
             uniform vec4 fragColor; 
           
             void main() {
               gl_FragColor = fragColor; 
             }
-          </script>
-          <script type="text/javascript" src="Common/webgl-utils.js"></script>
-          <script type="text/javascript" src="Common/InitShaders.js"></script>
-          <script type="text/javascript" src="Common/MV.js"></script>
+        </script>
 
-          <script type="text/javascript" src="js/main.js"></script>
-        </head>
+        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <script type="text/javascript" src="Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="Common/InitShaders.js"></script>
+        <script type="text/javascript" src="Common/MV.js"></script>
+
+        <script type="text/javascript" src="js/init.js"></script>
+        <script type="text/javascript" src="js/render.js"></script>
+        <script type="text/javascript" src="js/logic.js"></script>
+    </head>
 
     <!-- ******* BODY ******* -->
-          <body onload="initGL()">
-              <audio id="music" style="display:hidden" loop=""></audio>
-              <div class="header clearfix">
-                  <button id="aboutButton">About</button>
-                  <button id="optionsButton">Options</button>
-                  <div class="score"> Score: <span id="score1">0</span></div>
-              </div>
-              <div id="overlay" onclick="disableOverlay()">
-                  Click to play!
-              </div>
-              <div class="canvas_container">  
-                  <canvas id="canvas" width="1024" height="600"></canvas>
-              </div>
-              <div class="footer">
-                  Computer Graphics project, by Andrei Bublea.
-              </div>
-              <!-- Kodal About Button -->
-              <div id="modalAboutButton" class="modal">
-              <!-- Modal About Content -->
-                  <div class="modal-about-content">
-                      <div>
-                          <h1>Breakout, the game</h1>
-                          <span>
-                              Hit all the bricks.<br>
-                              The more you catch it, the faster it gets, so make sure to aim well!<br>
-                              You can customize/adjust difficulty in the options menu.
-                          </span>
-                          <hr/>
-                          The game was developed using webgl, html, css and javascript.
-                      </div>
+    <body onload="initGL()">
+        <audio id="music" style="display:hidden" loop=""></audio>
+        <div class="header clearfix">
+            <button id="aboutButton">About</button>
+            <button id="optionsButton">Options</button>
+            <div class="score"> Score: <span id="score1">0</span></div>
+        </div>
+        <div id="overlay" onclick="disableOverlay()">
+            Click to play!
+        </div>
+        <div class="canvas_container">  
+            <canvas id="canvas" width="1024" height="600"></canvas>
+        </div>
+        <div class="footer">
+            Computer Graphics project, by Andrei Bublea.
+        </div>
+        <!-- Kodal About Button -->
+        <div id="modalAboutButton" class="modal">
+        <!-- Modal About Content -->
+            <div class="modal-about-content">
+                <div>
+                    <h1>Breakout, the game</h1>
+                    <span>
+                        Hit all the bricks.<br>
+                        The more you catch it, the faster it gets, so make sure to aim well!<br>
+                        You can customize/adjust difficulty in the options menu.
+                    </span>
+                    <hr/>
+                    The game was developed using webgl, html, css and javascript.
+                </div>
+          </div>
+        </div>
+        <!-- The Optionos Button -->
+        <div id="modalOptionsButton" class="modal">
+        <!-- Modal Options Content -->
+            <div class="modal-options-content">
+                <div style="text-align: center">
+                    <h1 style="text-align:center">Options</h1>
+                    <hr/>
+                    <span id="htmlTrail">
+                        Trail Length:
+                        <span id="htmlTrailLen"> 30</span>
+                    </span>
+                    <input id="trlength" class="slider" type="range" value="30" min="1" max="100" onClick="onSetTrailLen()" oninput="dispTrailLen(this.value)">
+                    <br><br>
+                    <span id="sparks">
+                        Spark Level:
+                        <span id="htmlSparksCount"> 10</span>
+                    </span>
+                    <input id="sparkscnt" class="slider" type="range" value="10" min="0" max="50" onClick="onSetSparksCnt()" oninput="dispSparksCnt(this.value)">
+                    <br><br>
+                    <span id="ballSpeed">
+                        Ball Speed:
+                        <span id="htmlBallSpeed"> 0.2</span>
+                    </span>
+                    <input id="ballSpeedSlider" class="slider" type="range" value="0.2" min="0.1" max="2.0" step="0.1" onClick="onSetBallSpeedGain()" oninput="dispBallSpeedGain(this.value)">
                 </div>
             </div>
-            <!-- The Optionos Button -->
-            <div id="modalOptionsButton" class="modal">
-              <!-- Modal Options Content -->
-                <div class="modal-options-content">
-                    <div style="text-align: center">
-                        <h1 style="text-align:center">Options</h1>
-                        <hr/>
-                        <span id="htmlTrail">
-                            Trail Length:
-                            <span id="htmlTrailLen"> 30</span>
-                        </span>
-                        <input id="trlength" class="slider" type="range" value="30" min="1" max="100" onClick="onSetTrailLen()" oninput="dispTrailLen(this.value)">
-                        <br><br>
-                        <span id="sparks">
-                            Spark Level:
-                            <span id="htmlSparksCount"> 10</span>
-                        </span>
-                        <input id="sparkscnt" class="slider" type="range" value="10" min="0" max="50" onClick="onSetSparksCnt()" oninput="dispSparksCnt(this.value)">
-                        <br><br>
-                        <span id="ballSpeed">
-                            Ball Speed:
-                            <span id="htmlBallSpeed"> 0.5</span>
-                        </span>
-                        <input id="ballSpeedSlider" class="slider" type="range" value="0.5" min="0.1" max="2.0" step="0.1" onClick="onSetBallSpeedGain()" oninput="dispBallSpeedGain(this.value)">
-                    </div>
-                </div>
-            </div>
-            </div>
-            </div>
-          </body>
-          <script type="text/javascript" src="js/other.js"></script>
+        </div>
+        </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="js/other.js"></script>
 </html>
