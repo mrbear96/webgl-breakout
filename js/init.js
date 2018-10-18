@@ -102,6 +102,7 @@ function initObjects() {
 	initSparks();
 
 	document.getElementById("score1").innerHTML = 0;
+	document.getElementById('ball-speed').innerHTML = 2;
 }
 
 function initBall(){
@@ -215,7 +216,7 @@ function changeColorv(colorvect)
 }
 
 /* updateScore(playerNum): updates the score of player #playerNum */
-function displayScore(playerNum) {
+function displayScore() {
 		field.score1 += (ball.speed+1)*(ball.speed+1);
 		document.getElementById('score1').innerHTML = Math.round(field.score1);
 }

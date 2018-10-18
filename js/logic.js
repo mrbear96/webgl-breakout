@@ -122,8 +122,9 @@ function checkPaddleCollision(){
 			(ball.x  < paddle.x + paddle.halfwidth)) //COLLISION!
 		{ 
 			yDir = 1;
-			ball.speed += ballSpeedGain/ball.speed;
-			theta = ( paddle.x - ball.x )* 2 * Math.PI;
+            ball.speed += ballSpeedGain/ball.speed;
+            theta = ( paddle.x - ball.x )* 2 * Math.PI;
+            dispBallSpeed(ball.speed);
 			return true;
 		}
 	}

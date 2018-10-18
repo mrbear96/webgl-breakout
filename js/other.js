@@ -26,4 +26,4 @@ function onSetSparksCnt() { sparksCnt = document.getElementById('sparkscnt').val
 function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').innerHTML = parseFloat(val).toFixed(1); }
 function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }
 
-
+function dispBallSpeed( val ) { document.getElementById('ball-speed').innerHTML = parseFloat(val).toFixed(2); }
