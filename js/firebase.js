@@ -21,6 +21,7 @@ var user;
 var token;
 
 function login() {
+console.log("qwe");
 
 if (!user){
   firebase.auth().signInWithPopup(provider).then(function(result) {

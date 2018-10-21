@@ -217,14 +217,18 @@ function randomIntFromInterval(min,max){
 function enableOverlay() {
 	document.getElementById("_overlay").style.display = "block";
 
-	if (field != null)
+	if (field && user)
 	{
 		var button = document.createElement("BUTTON");
 		button.setAttribute('id', 'upload-score-button');
 		button.appendChild(document.createTextNode("UploadScore"));
-		button.onclick = function () { writeUserData(user.displayName, getScore(), getCurrentDate()); };
+		button.onclick = uploadScore;
 		document.getElementById('uploadScore').appendChild(button);
 	}
+}
+
+function uploadScore() {
+	writeUserData(user.displayName, getScore(), getCurrentDate()); 
 }
 
 enableOverlay();
