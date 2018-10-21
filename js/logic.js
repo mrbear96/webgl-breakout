@@ -140,3 +140,110 @@ function resetBall(playerNum) {
 	transYBall = 0.01;
 	yDir = -1;
 }
+
+function generateSparks( num )
+{
+	for (var i=0; i<num; i++){
+		sparks.lcoords.push(vec2(ball.x,ball.y));
+		sparks.coords.push(vec2(ball.x,ball.y));
+		sparks.m_directions.push(vec2(randomIntFromInterval(-0.005,0.005), randomIntFromInterval(-0.005,0.005)));
+		sparks.alive.push(10);
+	}
+}
+
+/* changeColor(): update the ball with a random color after a paddle collision */
+function changeColor() {
+	ball.color = vec4(Math.random().toFixed(2),Math.random().toFixed(2),Math.random().toFixed(2),1.0);
+}
+
+function changeColorv(colorvect)
+{
+	ball.color = vec4(colorvect[0], colorvect[1], colorvect[2], 1.0);
+}
+
+/* updateScore(playerNum): updates the score of player #playerNum */
+function displayScore() {
+		field.score1 += (ball.speed+1)*(ball.speed+1);
+		document.getElementById('score1').innerHTML = getScore();
+}
+
+function getScore() {
+	return Math.round(field.score1 * 100 ) / 100;
+}
+
+function displaySpeed(){
+	field.score2 = Math.sqrt(ball.speed * 0.01 * theta*ball.speed * 0.01 * theta + transYBall * yDir * ball.speed*transYBall * yDir * ball.speed);
+	document.getElementById('score2').innerHTML = field.score2;
+}
+
+// function to move the paddle to mouse coords
+function onDocumentMouseMove( event ){
+
+	mouseX = event.clientX - (document.body.clientWidth - canvas.width)/2;
+	normalized = (mouseX-canvas.width/2) / canvas.width*2;
+
+	if ( normalized > -1 + paddle.halfwidth && normalized < 1 - paddle.halfwidth){	
+		transX1 = normalized;
+		paddle.x = transX1;
+	} else if (normalized > -1 + paddle.halfwidth) {
+		transX1 = 1 - paddle.halfwidth;
+		paddle.x = transX1;
+	} else {
+		transX1 = -1 + paddle.halfwidth;
+		paddle.x = transX1;
+	}
+}
+
+function onDocumentMouseClick( event ){
+	if (field.playing == false) {
+		initObjects();
+		field.playing = true;
+		disableOverlay();
+	}
+}
+
+function playSound(sound){
+	var snd = document.getElementById( "music" );
+	snd.pause;
+	snd = new Audio(sound);
+	snd.volume = 0.2;
+	snd.play();
+}
+
+function randomIntFromInterval(min,max){
+    return Math.random()*(max-min)+min;
+}
+
+function enableOverlay() {
+	document.getElementById("_overlay").style.display = "block";
+
+	if (field != null)
+	{
+		var button = document.createElement("BUTTON");
+		button.setAttribute('id', 'upload-score-button');
+		button.appendChild(document.createTextNode("UploadScore"));
+		button.onclick = function () { writeUserData(user.displayName, getScore(), getCurrentDate()); };
+		document.getElementById('uploadScore').appendChild(button);
+	}
+}
+
+enableOverlay();
+
+function disableOverlay() {
+	document.getElementById("_overlay").style.display = "none";
+	deleteElementById("upload-score-button");
+	initObjects();
+	field.playing = true;
+}
+
+function dispTrailLen( val ){ document.getElementById('htmlTrailLen').innerHTML = val; }
+
+function onSetTrailLen() {
+	var val = document.getElementById('trlength').value;
+
+	for(var i= trailLen < val ? trailLen : 0; i<100; i++){
+		trail.coords[i][0] = -2;
+		trail.coords[i][1] = -2;
+	}
+	trailLen = val;
+}

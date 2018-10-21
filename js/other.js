@@ -1,22 +1,25 @@
-var modalAbout = document.getElementById('modalAboutButton');
-var modalOptions = document.getElementById('modalOptionsButton');
+var modalAbout = document.getElementById('modalAbout');
+var modalOptions = document.getElementById('modalOptions');
+var modalLeaderboard = document.getElementById('modalLeaderboard');
 
 // Get the button that opens the modal
 var btnAbout = document.getElementById('aboutButton');
 var btnOptions = document.getElementById('optionsButton')
-
+var btnLeaderboard = document.getElementById('leaderboardButton');
 
 // When the user clicks on the button, open the modal 
-btnAbout.onclick = function(){ modalAbout.style.display = "block"; }
-btnOptions.onclick = function(){ modalOptions.style.display = "block"; }
-
+btnAbout.onclick = function(){ modalAbout.style.display = 'block'; }
+btnOptions.onclick = function(){ modalOptions.style.display = 'block'; }
+btnLeaderboard.onclick = function() { modalLeaderboard.style.display ='block';}
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+document.onclick = function(event) {
     if (event.target == modalAbout) {
         modalAbout.style.display = "none";
     } else if (event.target == modalOptions){
         modalOptions.style.display = "none";
+    } else if (event.target == modalLeaderboard){
+        modalLeaderboard.style.display = "none";
     }
 }
 
@@ -27,3 +30,16 @@ function dispBallSpeedGain( val ) { document.getElementById('htmlBallSpeed').inn
 function onSetBallSpeedGain() { ballSpeedGain = document.getElementById("ballSpeedSlider").value; }
 
 function dispBallSpeed( val ) { document.getElementById('ball-speed').innerHTML = parseFloat(val).toFixed(2); }
+
+function deleteElementById(id)
+{
+  if (document.contains(document.getElementById(id))) 
+  document.getElementById(id).remove();
+}
+
+function getCurrentDate()
+{
+    var date = new Date();
+    date.setUTCHours(3);
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+}

@@ -34,7 +34,7 @@ body{
     margin-left: 200px;
 }
 
-#aboutButton {
+.navbar-button {
     border-radius: 34px;
     background: #36486b40;
     color: white;
@@ -45,7 +45,7 @@ body{
     
 }
 
-#optionsButton {
+.navbar-button {
     border-radius: 34px;
     background: #36486b40;
     color: white;
@@ -147,20 +147,16 @@ h1 {
 }
 
 #overlay {
-   position:absolute;
     display: block;
-    width: 300px;
-    height: 200px;
-    top: 0;
-    margin-left: calc(50% - 150px);
-    margin-top: 250px;
-    z-index: 2;
+    width: 100px;
+    height: 70px;
     cursor: pointer;
     background: url("../res/refresh.png");
     background-repeat: no-repeat;
-    background-color: rgba(54, 72, 107, 0.33);
+    background-color: rgb(255, 255, 255);
     background-position: center;
     background-position-y: -5px;
+    background-size: contain;
     color:#BBB2B2;
     font-size: 20px;
     text-align: center;
@@ -172,7 +168,13 @@ h1 {
     0px -6px 8px -5px rgba(204, 204, 204, 1),
     0px 0px 3px 1px #000,
     inset 1px 5px 200px 5px #000;
+}
 
+#_overlay {
+    z-index: 2;
+    position: absolute;
+    margin-left: calc(50vw - 150px);
+    margin-top: 150px;
 }
 
 #htmlTrail {

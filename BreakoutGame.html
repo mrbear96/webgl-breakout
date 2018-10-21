@@ -7,6 +7,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" type="text/css" href="css/sp.css">
 
+        <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+        <script type="text/javascript" src="js/firebase.js"></script>
+
         <script id="vertex-shader" type="x-shader/x-vertex">
   
             precision mediump float;
@@ -41,32 +44,36 @@
         <script type="text/javascript" src="Common/webgl-utils.js"></script>
         <script type="text/javascript" src="Common/InitShaders.js"></script>
         <script type="text/javascript" src="Common/MV.js"></script>
-
-        <script type="text/javascript" src="js/init.js"></script>
-        <script type="text/javascript" src="js/render.js"></script>
-        <script type="text/javascript" src="js/logic.js"></script>
     </head>
 
     <!-- ******* BODY ******* -->
     <body onload="initGL()">
         <audio id="music" style="display:hidden" loop=""></audio>
         <div class="header clearfix">
-            <button id="aboutButton">About</button>
-            <button id="optionsButton">Options</button>
+            <button id="aboutButton" class='navbar-button'>About</button>
+            <button id="optionsButton" class='navbar-button'>Options</button>
+            <button id="leaderboardButton" class='navbar-button'>Leaderboard</button>
             <div class="score"> Score: <span id="score1">0</span></div>
             <div> Ball Speed: <span id="ball-speed">0</span></div>
         </div>
-        <div id="overlay" onclick="disableOverlay()">
-            Click to play!
+
+        <div id="_overlay"> 
+                <div id="uploadScore"></div>
+                <div id='overlay' onclick='disableOverlay();'></div>
         </div>
+
         <div class="canvas_container">  
             <canvas id="canvas" width="1024" height="600"></canvas>
+            
         </div>
+
         <div class="footer">
             <!-- Computer Graphics project, by Andrei Bublea. -->
         </div>
+
+        <button onclick="login();"> Login with google</button>
         <!-- Kodal About Button -->
-        <div id="modalAboutButton" class="modal">
+        <div id="modalAbout" class="modal">
         <!-- Modal About Content -->
             <div class="modal-about-content">
                 <div>
@@ -81,8 +88,8 @@
                 </div>
           </div>
         </div>
-        <!-- The Optionos Button -->
-        <div id="modalOptionsButton" class="modal">
+
+        <div id="modalOptions" class="modal">
         <!-- Modal Options Content -->
             <div class="modal-options-content">
                 <div style="text-align: center">
@@ -108,8 +115,13 @@
                 </div>
             </div>
         </div>
-        </div>
+
+        <div id="modalLeaderboard" class="modal">
+
         </div>
     </body>
+    <script type="text/javascript" src="js/init.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/logic.js"></script>
     <script type="text/javascript" src="js/other.js"></script>
 </html>
