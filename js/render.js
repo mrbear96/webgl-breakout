@@ -34,6 +34,7 @@
             }
     
             gl.bufferData(gl.ARRAY_BUFFER, flatten(sparks.vertices), gl.STATIC_DRAW);
+            
             for (var i=0; i < sparks.coords.length; i++){
                 sparks.coords[i][0] += sparks.m_directions[i][0]/4;
                 sparks.coords[i][1] += sparks.m_directions[i][1]/4;

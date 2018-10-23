@@ -10,7 +10,12 @@ var btnLeaderboard = document.getElementById('leaderboardButton');
 // When the user clicks on the button, open the modal 
 btnAbout.onclick = function(){ modalAbout.style.display = 'block'; }
 btnOptions.onclick = function(){ modalOptions.style.display = 'block'; }
-btnLeaderboard.onclick = function() { modalLeaderboard.style.display ='block';}
+btnLeaderboard.onclick = function() { 
+    modalLeaderboard.style.display ='block';
+    deleteElementById('leaderboardTable');
+    createLeaderboardTableHeader();
+    createLeaderboardTableContent();
+}
 
 // When the user clicks anywhere outside of the modal, close it
 document.onclick = function(event) {
@@ -42,4 +47,58 @@ function getCurrentDate()
     var date = new Date();
     date.setUTCHours(3);
     return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+}
+
+var table;
+function createLeaderboardTableHeader()
+{
+    var t_names = ["User" , "Score", "Date"];
+    table = document.createElement('table');
+    table.setAttribute('id','leaderboardTable');
+
+    var tableHeaderEntry = document.createElement('tr');
+    for (var i = 0; i < t_names.length; i++)
+    {
+        var tableCol = document.createElement('th');
+        tableCol.appendChild(document.createTextNode(t_names[i]));
+        tableHeaderEntry.appendChild(tableCol);
+    }
+    table.appendChild(tableHeaderEntry);
+    modalLeaderboard.appendChild(table);
+}
+
+function createLeaderboardTableContent()
+{
+    firebase.database().ref('/Leaderboard/').orderByChild("/Score").once('value').then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            var childData = childSnapshot.val();
+            console.log(key + "  " + childData.Score + " " + childData.Date);
+
+            var tr = document.createElement('tr');
+            
+            var td = document.createElement('td');
+            td.innerHTML = key;
+            tr.appendChild(td);
+            td = document.createElement('td');
+            td.innerHTML = childData.Score;
+            tr.appendChild(td);
+            td = document.createElement('td');
+            td.innerHTML = childData.Date;
+            tr.appendChild(td);
+
+            table.appendChild(tr);
+          });
+      });
+}
+
+function initAccount()
+{
+    var userphoto = document.getElementById('loginButton');
+    userphoto.style.background = 'url(' + user.photoURL + ')';
+    userphoto.style.backgroundSize = 'cover';
+
+    document.getElementById('userName').innerHTML = user.displayName;
+
+    console.log(user);
 }

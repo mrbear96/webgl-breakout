@@ -36,11 +36,8 @@
               gl_FragColor = fragColor; 
             }
         </script>
-
         
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
         <script type="text/javascript" src="Common/webgl-utils.js"></script>
         <script type="text/javascript" src="Common/InitShaders.js"></script>
         <script type="text/javascript" src="Common/MV.js"></script>
@@ -50,11 +47,21 @@
     <body onload="initGL()">
         <audio id="music" style="display:hidden" loop=""></audio>
         <div class="header clearfix">
+            <div style='float:left; margin-left: 10px; margin-top: 0px;'>
+                <button id='loginButton' class='noselect' onclick="login();" > </button>
+                <span id='userName'> Not logged in </span>
+            </div>
+            
             <button id="aboutButton" class='navbar-button'>About</button>
             <button id="optionsButton" class='navbar-button'>Options</button>
             <button id="leaderboardButton" class='navbar-button'>Leaderboard</button>
-            <div class="score"> Score: <span id="score1">0</span></div>
-            <div> Ball Speed: <span id="ball-speed">0</span></div>
+            
+            <div>
+                    <span > Score: <span id="score1">0</span></span>
+                    <br>
+                    <span> Ball Speed: <span id="ball-speed">0</span></span>
+            </div>
+            
         </div>
 
         <div id="_overlay"> 
@@ -71,7 +78,7 @@
             <!-- Computer Graphics project, by Andrei Bublea. -->
         </div>
 
-        <button onclick="login();"> Login with google</button>
+        
         <!-- Kodal About Button -->
         <div id="modalAbout" class="modal">
         <!-- Modal About Content -->
@@ -116,9 +123,7 @@
             </div>
         </div>
 
-        <div id="modalLeaderboard" class="modal">
-
-        </div>
+        <div id="modalLeaderboard" class="modal"> </div>
     </body>
     <script type="text/javascript" src="js/init.js"></script>
     <script type="text/javascript" src="js/render.js"></script>

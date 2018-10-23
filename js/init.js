@@ -177,10 +177,6 @@ function initGL()
 	viewportRatio = canvas.height / canvas.width;
 	initObjects(); // Spin up game state
 
-	// Set up score in webpage
-	document.getElementById('score1').innerHTML = field.score1;
-	//document.getElementById('score2').innerHTML = field.score2;
-
 	program = initShaders( gl, "vertex-shader", "fragment-shader" ); // Spin up our shader programs
 	gl.useProgram( program ); // Bind shader program 'program' to currently used set of shaders
 
