@@ -82,7 +82,8 @@ function initObjects() {
 	field = {
 		score1: 0,
 		score2: 0,
-		playing: false
+		playing: false,
+		paused: false
 	};
 
 
@@ -192,6 +193,7 @@ function initGL()
 	fragColorLoc = gl.getUniformLocation(program, "fragColor"); // Populate global variable w/ frag_color location
 
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener("keydown", pause,  false);
 
 	render();
 }

@@ -2,18 +2,21 @@
 // ************* RENDER FUNCTIONS *****************
 
 /* render(): Main event loop, controls vertex/fragment rendering and fires
-	collision detection/score update functions when necessary. */
+    collision detection/score update functions when necessary. */
     function render() 
     {
-        gl.clear(gl.COLOR_BUFFER_BIT); // Clear the buffer
-    
+        if(!field.paused)
+            gl.clear(gl.COLOR_BUFFER_BIT); // Clear the buffer
+       
         if (field.playing){ // If game is ongoing...
-            renderTrail();
-            renderBall();
-            renderPaddle();
-            renderBricks();
-            renderSparks();
-            ballCollisionUpdate(); // Check ball collision
+            if(!field.paused){
+                renderTrail();
+                renderBall();
+                renderPaddle();
+                renderBricks();
+                renderSparks();
+                ballCollisionUpdate(); // Check ball collision
+            }
         }
         requestAnimFrame(render); // Inform the browser we're ready to render another frame
     }
@@ -22,7 +25,8 @@
     function renderSparks()
     {
         gl.uniform4f(fragColorLoc, sparks.colors[0], sparks.colors[1], sparks.colors[2], 1.0);
-    
+        gl.bufferData(gl.ARRAY_BUFFER, flatten(sparks.vertices), gl.STATIC_DRAW);
+        
         for (var num=0; num < sparks.lcoords.length; num++){
             sparks.alive[num] -= 1;
             if(sparks.alive[num] < 0) {
@@ -32,8 +36,6 @@
                 sparks.m_directions.splice(num,1);
                 continue;
             }
-    
-            gl.bufferData(gl.ARRAY_BUFFER, flatten(sparks.vertices), gl.STATIC_DRAW);
             
             for (var i=0; i < sparks.coords.length; i++){
                 sparks.coords[i][0] += sparks.m_directions[i][0]/4;

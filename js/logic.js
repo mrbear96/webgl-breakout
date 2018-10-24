@@ -251,3 +251,12 @@ function onSetTrailLen() {
 	}
 	trailLen = val;
 }
+
+function pause() {
+	if (field.playing)
+	{
+		field.paused = !field.paused;
+		console.log("qwe");
+	}
+	
+}
