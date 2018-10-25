@@ -1,9 +1,8 @@
 body{
     background: rgb(34, 34, 34);
     margin: 10px 0;
-    background: url("/res/brick1.jpg");
+    background: url("/res/brick3.jpg") no-repeat center fixed;
     background-size: cover;
-    background-repeat: no-repeat;
 }
 
 #canvas {
