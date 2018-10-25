@@ -52,7 +52,7 @@ function getCurrentDate()
 var table;
 function createLeaderboardTableHeader()
 {
-    var t_names = ["User" , "Score", "Date"];
+    var t_names = ["#", "User" , "Score", "Date"];
     table = document.createElement('table');
     table.setAttribute('id','leaderboardTable');
 
@@ -64,6 +64,7 @@ function createLeaderboardTableHeader()
         tableHeaderEntry.appendChild(tableCol);
     }
     table.appendChild(tableHeaderEntry);
+   
     modalLeaderboard.appendChild(table);
 }
 
@@ -73,11 +74,15 @@ function createLeaderboardTableContent()
         snapshot.forEach(function(childSnapshot) {
             var key = childSnapshot.key;
             var childData = childSnapshot.val();
-            console.log(key + "  " + childData.Score + " " + childData.Date);
 
+            var tableIdx = 1;
+           // console.log(key + "  " + childData.Score + " " + childData.Date);
+            //console.log(snapshot);
             var tr = document.createElement('tr');
-            
             var td = document.createElement('td');
+            td.innerHTML = tableIdx;
+            tr.appendChild(td);
+            td = document.createElement('td');
             td.innerHTML = key;
             tr.appendChild(td);
             td = document.createElement('td');
@@ -86,9 +91,13 @@ function createLeaderboardTableContent()
             td = document.createElement('td');
             td.innerHTML = childData.Date;
             tr.appendChild(td);
-
-            table.appendChild(tr);
+            table.insertBefore(tr, table.childNodes[1]);
+            tableIdx++;
           });
+          for (var i = 1; i < table.childNodes.length; i++)
+          {
+              table.childNodes[i].childNodes[0].innerHTML = i;
+          }
       });
 }
 

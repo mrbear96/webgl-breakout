@@ -252,8 +252,8 @@ function onSetTrailLen() {
 	trailLen = val;
 }
 
-function pause() {
-	if (field.playing)
+function pause(event) {
+	if (field.playing && event.keyCode == 32)
 	{
 		field.paused = !field.paused;
 		console.log("qwe");

@@ -95,7 +95,7 @@ function initObjects() {
 	yDir = -1; 
 	xDir = -1; 
 	
-	theta = 0;
+	theta = 0.01;
 
 	initBall();
 	initTrail();

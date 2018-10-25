@@ -1,42 +1,45 @@
 body{
-    background: rgb(110, 162, 240);
+    background: rgb(34, 34, 34);
     margin: 10px 0;
+    background: url("/res/brick1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 #canvas {
     margin: auto auto;
     display: block;
-    background: url("../res/stars1.png");
-    
+    /*background: url("../res/stars1.png");*/
+    background-color: rgba(0, 0, 0, 0.699);
     background-repeat: no-repeat;
     background-size: 1024px 600px;
      box-shadow: 
-         0px 6px 8px -5px #CCC,
-         0px -6px 8px -5px #CCC,
-         0px 0px 3px 1px #000,
-         inset 1px 10px 30px 20px #000;
+         0px 6px 8px -5px rgb(0, 0, 0),
+         0px -6px 8px -5px rgb(0, 0, 0),
+         0px 0px 3px 1px rgb(0, 0, 0),
+         inset 1px 10px 30px 20px rgb(0, 0, 0);
 }
 
 .canvas_container{
-    background: rgba(0, 0, 0, 0.77);
-    width: 70vw;  
+    background: rgba(0, 0, 0, 0.514);
+    width: 70vw;
     align-items: center;
     margin: auto auto;
     border-radius: 30px;
     min-width: 1100px;
     box-shadow: 
-    0px 5px 20px 5px rgba(0, 0, 0, 0.67);
+    0px 5px 20px 5px rgba(0, 0, 0, 0);
 }
 
 .score{
-    color: white;
     font-size: 36px;
 }
 
 .navbar-button {
+    color:rgb(0, 201, 0);
+
     border-radius: 34px;
     background: #36486b40;
-    color: white;
     font-size: 26px;
     float: right;
     margin-top: 10px;
@@ -47,7 +50,7 @@ body{
 .header {
     width: 80vw;
     background-color: rgba(0, 0, 0, 0.77);
-    color:white;
+    color:rgb(0, 201, 0);
     text-align: center;
     border-radius: 30px;
     margin: 0 auto;
@@ -62,7 +65,6 @@ body{
 
 .footer {
     padding-top: 10px;
-    color:white;
     text-align: center;
     width:100vw;
 }
@@ -200,16 +202,37 @@ h1 {
 
 #modalLeaderboard {
     color:white;
+
 }
 
-#modalLeaderboard table{
+#leaderboardTable{
     margin: 60px auto;
     text-align: left;
+    padding: 50px;
+    
+    border-spacing: 0px;
 }
 
-#modalLeaderboard table th{
-    font-size: 30px;
+/* Table Header! */
+#leaderboardTable tr:first-of-type{
+    background: #333333 !important;
 }
+
+/* Table header Entry*/
+#leaderboardTable th{
+    font-size: 30px;
+    padding: 15px 30px;
+}
+
+#leaderboardTable td{
+    padding: 10px 30px;
+    font-size: 20px;
+    color: #808080;
+}
+
+#leaderboardTable tr:nth-child(even) {background-color: #eaf8e6;}
+#leaderboardTable tr:nth-child(odd) {background-color: white;}
+
 
 #loginButton {
     border-radius: 50%;
