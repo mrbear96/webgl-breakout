@@ -134,7 +134,7 @@ function checkPaddleCollision(){
 function resetBall(playerNum) {
 	ball.x = 0;
 	ball.y = 0;
-	ball.speed = 2;
+	ball.speed = 1;
 	ball.color = vec4(1.0, 1.0, 1.0, 1.0);
 	theta = 0;
 	transYBall = 0.01;

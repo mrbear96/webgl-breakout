@@ -22,7 +22,7 @@ var viewportRatio; //  Variable used to correct how objects appear on the viewpo
 var trailLen = 30; // Circular buffer length for trail
 var trailIdx = 0; // It's index
 var sparksCnt = 10;
-var ballSpeedGain = 0.5;
+var ballSpeedGain = 0.1;
 
 var canvas;
 
@@ -50,7 +50,7 @@ function initObjects() {
 		x: 0,
 		y: 0,
 		radius: 0.03,
-		speed: 2,
+		speed: 1,
 		color: vec4(1.0,1.0,1.0,1.0),
 		vertices: []
 	};
@@ -103,7 +103,7 @@ function initObjects() {
 	initSparks();
 
 	document.getElementById("score1").innerHTML = 0;
-	document.getElementById('ball-speed').innerHTML = 2;
+	document.getElementById('ball-speed').innerHTML = ball.speed;
 }
 
 function initBall(){

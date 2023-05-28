@@ -1,7 +1,7 @@
 body{
     background: rgb(34, 34, 34);
     margin: 10px 0;
-    background: url("/res/brick3.jpg") no-repeat center fixed;
+    background: url("../res/brick3.jpg") no-repeat center fixed;
     background-size: cover;
 }
 
@@ -237,7 +237,7 @@ h1 {
     border-radius: 50%;
     width: 64px;
     height: 64px;
-    background: url("/res/cont_nelogat.jpg");
+    background: url("../res/cont_nelogat.jpg");
     background-size: cover;
 }
 
